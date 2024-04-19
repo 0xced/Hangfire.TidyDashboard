@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Net;
 using System.Text;
-using Hangfire.Common;
 using Hangfire.Storage;
 
 // ReSharper disable once CheckNamespace
@@ -34,8 +32,8 @@ internal static class TidyJobHistoryRenderer
 
         if (stateData.TryGetValue("Result", out var resultString) && !string.IsNullOrWhiteSpace(resultString))
         {
-            var result = stateData["Result"];
-            builder.Append($"<dt>Result:</dt><dd>{TidyHtmlEncode(result)}</dd>");
+            var result = stateData["Result"].PrettyJsonString();
+            builder.Append($"<dt>Result:</dt><dd>{html.HtmlEncode(result).ReplaceLineEndings("<br>")}</dd>");
         }
 
         if (builder.Length == dlTag.Length) return null;
@@ -43,22 +41,5 @@ internal static class TidyJobHistoryRenderer
         builder.Append("</dl>");
 
         return new NonEscapedString(builder.ToString());
-    }
-
-    private static string TidyHtmlEncode(string text)
-    {
-        if (text.StartsWith('\"'))
-        {
-            try
-            {
-                return WebUtility.HtmlEncode(SerializationHelper.Deserialize<string>(text, SerializationOption.User)).ReplaceLineEndings("<br>");
-            }
-            catch
-            {
-                // Ignore
-            }
-        }
-
-        return WebUtility.HtmlEncode(text);
     }
 }

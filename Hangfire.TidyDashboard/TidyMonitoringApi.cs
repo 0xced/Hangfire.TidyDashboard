@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Hangfire.Common;
 using Hangfire.Dashboard;
 using Hangfire.States;
 using Hangfire.Storage.Monitoring;
@@ -26,17 +25,7 @@ public class TidyMonitoringApi(JobStorageMonitor monitor) : JobStorageMonitor
 
         foreach (var (key, value) in jobDetails.Properties)
         {
-            if (value.StartsWith('\"'))
-            {
-                try
-                {
-                    jobDetails.Properties[key] = SerializationHelper.Deserialize<string>(value, SerializationOption.User);
-                }
-                catch
-                {
-                    // Ignore
-                }
-            }
+            jobDetails.Properties[key] = value.PrettyJsonString();
         }
 
         return jobDetails;
