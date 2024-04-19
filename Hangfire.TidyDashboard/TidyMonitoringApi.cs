@@ -26,13 +26,16 @@ public class TidyMonitoringApi(JobStorageMonitor monitor) : JobStorageMonitor
 
         foreach (var (key, value) in jobDetails.Properties)
         {
-            try
+            if (value.StartsWith('\"'))
             {
-                jobDetails.Properties[key] = SerializationHelper.Deserialize<string>(value, SerializationOption.User);
-            }
-            catch
-            {
-                // Ignore
+                try
+                {
+                    jobDetails.Properties[key] = SerializationHelper.Deserialize<string>(value, SerializationOption.User);
+                }
+                catch
+                {
+                    // Ignore
+                }
             }
         }
 

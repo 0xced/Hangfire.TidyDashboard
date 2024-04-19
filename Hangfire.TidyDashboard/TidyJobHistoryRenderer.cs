@@ -47,13 +47,18 @@ internal static class TidyJobHistoryRenderer
 
     private static string TidyHtmlEncode(string text)
     {
-        try
+        if (text.StartsWith('\"'))
         {
-            return WebUtility.HtmlEncode(SerializationHelper.Deserialize<string>(text, SerializationOption.User)).ReplaceLineEndings("<br>");
+            try
+            {
+                return WebUtility.HtmlEncode(SerializationHelper.Deserialize<string>(text, SerializationOption.User)).ReplaceLineEndings("<br>");
+            }
+            catch
+            {
+                // Ignore
+            }
         }
-        catch
-        {
-            return WebUtility.HtmlEncode(text);
-        }
+
+        return WebUtility.HtmlEncode(text);
     }
 }
