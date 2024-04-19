@@ -4,12 +4,17 @@ using System.Globalization;
 using System.Net;
 using System.Text;
 using Hangfire.Common;
+using Hangfire.Storage;
 
 // ReSharper disable once CheckNamespace
 namespace Hangfire.Dashboard;
 
-internal static class TidyHangfireDisplay
+internal static class TidyJobHistoryRenderer
 {
+    /// <summary>
+    /// A copy of the <see cref="Hangfire.Dashboard.JobHistoryRenderer.SucceededRenderer"/> implementation but with a tidy <c>Result</c>.
+    /// </summary>
+    /// <remarks>This renderer is automatically registered when the <see cref="TidyMonitoringApi"/> class is used (in the static constructor).</remarks>
     public static NonEscapedString? SucceededRenderer(HtmlHelper html, IDictionary<string, string> stateData)
     {
         const string dlTag = "<dl class=\"dl-horizontal\">";
