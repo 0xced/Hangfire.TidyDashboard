@@ -19,13 +19,16 @@ public class TidyMonitoringApi(JobStorageMonitor monitor) : JobStorageMonitor
     }
 
     /// <inheritdoc />
-    public override JobDetailsDto JobDetails(string jobId)
+    public override JobDetailsDto? JobDetails(string jobId)
     {
         var jobDetails = monitor.JobDetails(jobId);
 
-        foreach (var (key, value) in jobDetails.Properties)
+        if (jobDetails != null)
         {
-            jobDetails.Properties[key] = value.PrettyJsonString();
+            foreach (var (key, value) in jobDetails.Properties)
+            {
+                jobDetails.Properties[key] = value.PrettyJsonString();
+            }
         }
 
         return jobDetails;
