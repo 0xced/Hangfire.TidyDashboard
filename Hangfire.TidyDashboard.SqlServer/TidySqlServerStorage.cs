@@ -7,7 +7,7 @@ using Hangfire.Storage.Monitoring;
 namespace Hangfire.SqlServer;
 
 /// <summary>
-/// A <see cref="SqlServerStorage"/> subclass whose <see cref="GetMonitoringApi"/> method returns a tidy objects.
+/// A <see cref="SqlServerStorage"/> subclass whose <see cref="GetMonitoringApi"/> method returns tidy <see cref="JobDetailsDto"/> objects.
 /// </summary>
 public class TidySqlServerStorage : SqlServerStorage
 {
@@ -26,5 +26,5 @@ public class TidySqlServerStorage : SqlServerStorage
     /// <summary>
     /// Gets an <see cref="IMonitoringApi"/> that returns tidy <see cref="JobDetailsDto"/> objects.
     /// </summary>
-    public override IMonitoringApi GetMonitoringApi() => new TidyMonitoringApi((JobStorageMonitor)base.GetMonitoringApi());
+    public override IMonitoringApi GetMonitoringApi() => new TidyMonitoringApi(base.GetMonitoringApi());
 }

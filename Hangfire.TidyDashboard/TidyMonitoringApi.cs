@@ -11,7 +11,7 @@ namespace Hangfire.Storage;
 /// A wrapper around a <see cref="JobStorageMonitor"/> that tidies the <see cref="JobDetailsDto"/> objects returned by the <see cref="JobDetails"/> method.
 /// </summary>
 /// <param name="monitor">The <see cref="JobStorageMonitor"/> to wrap.</param>
-public class TidyMonitoringApi(JobStorageMonitor monitor) : JobStorageMonitor
+public class TidyMonitoringApi(IMonitoringApi monitor) : JobStorageMonitor
 {
     static TidyMonitoringApi()
     {
@@ -55,7 +55,7 @@ public class TidyMonitoringApi(JobStorageMonitor monitor) : JobStorageMonitor
     /// <inheritdoc />
     public override JobList<DeletedJobDto> DeletedJobs(int from, int count) => monitor.DeletedJobs(from, count);
     /// <inheritdoc />
-    public override JobList<AwaitingJobDto> AwaitingJobs(int from, int count) => monitor.AwaitingJobs(from, count);
+    public override JobList<AwaitingJobDto> AwaitingJobs(int from, int count) => ((JobStorageMonitor)monitor).AwaitingJobs(from, count);
     /// <inheritdoc />
     public override long ScheduledCount() => monitor.ScheduledCount();
     /// <inheritdoc />
@@ -71,17 +71,17 @@ public class TidyMonitoringApi(JobStorageMonitor monitor) : JobStorageMonitor
     /// <inheritdoc />
     public override long DeletedListCount() => monitor.DeletedListCount();
     /// <inheritdoc />
-    public override long AwaitingCount() => monitor.AwaitingCount();
+    public override long AwaitingCount() => ((JobStorageMonitor)monitor).AwaitingCount();
     /// <inheritdoc />
     public override IDictionary<DateTime, long> SucceededByDatesCount() => monitor.SucceededByDatesCount();
     /// <inheritdoc />
     public override IDictionary<DateTime, long> FailedByDatesCount() => monitor.FailedByDatesCount();
     /// <inheritdoc />
-    public override IDictionary<DateTime, long> DeletedByDatesCount() => monitor.DeletedByDatesCount();
+    public override IDictionary<DateTime, long> DeletedByDatesCount() => ((JobStorageMonitor)monitor).DeletedByDatesCount();
     /// <inheritdoc />
     public override IDictionary<DateTime, long> HourlySucceededJobs() => monitor.HourlySucceededJobs();
     /// <inheritdoc />
     public override IDictionary<DateTime, long> HourlyFailedJobs() => monitor.HourlyFailedJobs();
     /// <inheritdoc />
-    public override IDictionary<DateTime, long> HourlyDeletedJobs() => monitor.HourlyDeletedJobs();
+    public override IDictionary<DateTime, long> HourlyDeletedJobs() => ((JobStorageMonitor)monitor).HourlyDeletedJobs();
 }
